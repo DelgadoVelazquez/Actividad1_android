@@ -57,6 +57,9 @@ class _TaskBoardScreenState extends State<TaskBoardScreen> {
     return _tasks;
   }
 
+  // Contador derivado: cuántas tareas están completadas
+  int get _completadas => _tasks.where((t) => t.isCompleted).length;
+
   // Cambia el estado de completado de una tarea
   void _toggleCompletada(Task task) {
     setState(() {
@@ -78,64 +81,46 @@ class _TaskBoardScreenState extends State<TaskBoardScreen> {
     });
   }
 
-  // Agrega una nueva tarea mediante un diálogo
-  Future<void> _agregarTarea() async {
-    final controller = TextEditingController();
-
-    final nuevoTitulo = await showDialog<String>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Nueva tarea'),
-          content: TextField(
-            controller: controller,
-            autofocus: true,
-            decoration: const InputDecoration(
-              hintText: 'Escribe el nombre de la tarea',
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancelar'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(context, controller.text.trim()),
-              child: const Text('Agregar'),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (nuevoTitulo != null && nuevoTitulo.isNotEmpty) {
-      setState(() {
-        _tasks.add(Task(title: nuevoTitulo));
-      });
-    }
+  // Agrega una nueva tarea siguiendo la secuencia numérica (Tarea 1, Tarea 2, ...)
+  void _agregarTarea() {
+    setState(() {
+      final siguienteNumero = _tasks.length + 1;
+      _tasks.add(Task(title: 'Tarea $siguienteNumero'));
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Equipo 10A — Tareas'),
+        title: const Text('Equipo 10B'),
         centerTitle: true,
         backgroundColor: const Color(0xFFDCD9FB),
         elevation: 0,
       ),
       body: Column(
         children: [
-          // Fila con el switch del filtro
+          // Fila con el contador y el switch del filtro
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('Solo pendientes'),
-                Switch(
-                  value: _soloPendientes,
-                  onChanged: _toggleFiltro,
+                Text(
+                  'Completadas: $_completadas / ${_tasks.length}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                Row(
+                  children: [
+                    const Text('Solo pendientes'),
+                    Switch(
+                      value: _soloPendientes,
+                      onChanged: _toggleFiltro,
+                    ),
+                  ],
                 ),
               ],
             ),
