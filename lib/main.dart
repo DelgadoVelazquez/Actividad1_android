@@ -10,7 +10,7 @@ class TaskBoardApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Equipo 10B',
+      title: 'Equipo 10A — Tareas',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.indigo,
@@ -54,11 +54,12 @@ class _TaskBoardScreenState extends State<TaskBoardScreen> {
       task.isCompleted = !task.isCompleted;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Equipo 10B'),
+        title: const Text('Equipo 10A — Tareas'),
         centerTitle: true,
         backgroundColor: const Color(0xFFDCD9FB),
         elevation: 0,
@@ -94,5 +95,4 @@ class _TaskBoardScreenState extends State<TaskBoardScreen> {
       ),
     );
   }
-
 }
